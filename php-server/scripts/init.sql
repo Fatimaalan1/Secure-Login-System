@@ -6,7 +6,7 @@ CREATE TABLE users (
 );
 
 -- Insert default admin user
-INSERT INTO users (username, password) VALUES ('admin', 'password');
+INSERT INTO users (username, password) VALUES ('admin', PASSWORD('admin_password'));
 
 -- Create additional table and insert data
 CREATE TABLE other_table (
