@@ -22,7 +22,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 }
 
 // I added this part for login/registration
-iif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputUsername = $_POST['username'];
     $inputPassword = $_POST['password'];
 
