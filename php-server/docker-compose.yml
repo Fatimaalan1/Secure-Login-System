@@ -9,22 +9,25 @@ services:
     volumes:
       - ./src:/var/www/html
     depends_on:
-      - db
+      - db 
+
   db:
+    platform: linux/x86_64
     build:
       context: .
       dockerfile: Dockerfile-db
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: my_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
-  mysql_data:
-    # Define volume for persisting MySQL data
+  mysql_data: {}
+

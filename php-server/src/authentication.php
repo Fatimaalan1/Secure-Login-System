@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 $host = 'db';
@@ -13,7 +14,15 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//I added this part for logout
+if (isset($_GET['action']) && $_GET['action'] == 'logout') {
+    session_destroy(); 
+    header('Location: login.php');
+    exit();
+}
+
+// I added this part for login/registration
+iif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputUsername = $_POST['username'];
     $inputPassword = $_POST['password'];
 
@@ -32,8 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <form method="POST" action="">
     Username: <input type="text" name="username" required>
     Password: <input type="password" name="password" required>
     <button type="submit">Login</button>
 </form>
+
+<?php if (isset($_SESSION['username'])): ?>
+    <p>You are logged in as <?= $_SESSION['username']; ?>.</p>
+    <a href="?action=logout">Logout</a>
+<?php endif; ?>
