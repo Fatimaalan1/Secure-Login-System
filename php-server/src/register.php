@@ -13,23 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = 'Username and password are required.';
     }
 
-<<<<<<< HEAD
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $inputUsername = $_POST['username'];
-    $inputPassword = $_POST['password'];
-    
-    if (!empty($inputUsername) && !empty($inputPassword)) {
-        try{
-            $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-            $stmt->execute([$inputUsername, $inputPassword]);
-
-            header("Location: login.php");
-            exit(); 
-        }
-        catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-=======
     // If no error, proceed with registration
     if (empty($error)) {
         // Hash the password
@@ -50,12 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     } else {
         echo $error;
->>>>>>> 880195d (changes)
     }
-    else{
-        echo "Both username and password are required.";
-    }
-
 }
 
 // Close the database connection only if it is open
