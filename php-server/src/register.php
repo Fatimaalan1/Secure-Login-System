@@ -12,6 +12,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate input
     if (empty($username) || empty($password)) {
         $error = 'Username and password are required.';
+    } else {
+        // Password validation rules
+        $minLength = 8;
+        if (strlen($password) < $minLength) {
+            $error = "Password must be at least $minLength characters long.";
+        } elseif (!preg_match('/[A-Z]/', $password)) {
+            $error = 'Password must contain at least one uppercase letter.';
+        } elseif (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
+            $error = 'Password must contain at least one special character.';
+        }
     }
 
     // If no error, proceed with registration
@@ -26,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Execute the statement
         if ($stmt->execute()) {
             echo "Registration successful!";
-
         } else {
             echo "Error: " . $stmt->error;
         }
@@ -43,7 +52,6 @@ if ($conn) {
     $conn->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
