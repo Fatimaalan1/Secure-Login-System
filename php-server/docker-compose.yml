@@ -10,6 +10,9 @@ services:
       - ./src:/var/www/html
     depends_on:
       - db 
+    env_file:
+    - .env  # This line specifies the .env file
+
 
   db:
     platform: linux/x86_64
@@ -26,8 +29,8 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts:/docker-entrypoint-initdb.sql
 
 volumes:
-  mysql_data: {}
+   mysql_data: {}
 
