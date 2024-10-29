@@ -3,6 +3,6 @@
 
 function redirect($url) {
     header("Location: $url");
-    exit();
+    exit(); // Always exit after a redirect
 }
-
+?>
