@@ -4,25 +4,42 @@ session_start();
 // Include the database connection file
 require 'db.php';
 
-if (password_verify($password, $hashed_password)) {
-    $_SESSION['username'] = $username;
-    
-    // Fetch the role of the user
-    $stmt = $conn->prepare("SELECT role FROM users WHERE username = ?");
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Assuming 'username' and 'password' are posted from a login form
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Fetch the hashed password for the given username
+    $stmt = $conn->prepare("SELECT password, role FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->bind_result($role);
-    $stmt->fetch();
-    $_SESSION['role'] = $role; // Store the role in the session
+    $stmt->store_result();
 
-    // Redirect to the dashboard or admin page based on role
-    if ($role === 'admin') {
-        redirect('admin.php'); // Redirect to the admin page
+    // Check if user exists
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($hashed_password, $role);
+        $stmt->fetch();
+
+        // Verify password
+        if (password_verify($password, $hashed_password)) {
+            $_SESSION['username'] = $username;
+            $_SESSION['role'] = $role;
+
+            // Redirect based on role
+            if ($role === 'admin') {
+                redirect('admin.php');
+            } else {
+                redirect('dashboard.php');
+            }
+        } else {
+            echo "Invalid password.";
+        }
     } else {
-        redirect('dashboard.php'); // Redirect to a user dashboard
+        echo "No user found with that username.";
     }
-}
 
+    $stmt->close();
+}
 
 // Handle delete request
 if (isset($_GET['delete'])) {

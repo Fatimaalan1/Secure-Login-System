@@ -1,6 +1,5 @@
 <?php
 session_start();
-// login.php
 require 'config.php';
 require 'db.php';
 
@@ -9,18 +8,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+        // Prepare and execute the SQL statement
+        $stmt = $conn->prepare("SELECT password, role FROM users WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
 
-        
+        // Check if the username exists in the database
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($hashed_password);
+            // Bind the result to variables
+            $stmt->bind_result($stored_password, $role);
             $stmt->fetch();
 
-            if (password_verify($password, $hashed_password)) {
+            // Check password: skip hashing for admin_username
+            if ($username === 'admin_username' && $password === $stored_password) {
                 $_SESSION['username'] = $username;
+                $_SESSION['role'] = $role;
+                redirect('admin.php');
+            } elseif (password_verify($password, $stored_password)) {
+                // Normal user login with hashed password
+                $_SESSION['username'] = $username;
+                $_SESSION['role'] = $role;
                 redirect('dashboard.php');
             } else {
                 echo "Invalid password.";
@@ -28,15 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo "No user found with that username.";
         }
-        
+
+        // Close the statement
         $stmt->close();
-    }
-    else{
-        echo "Username and passwords are required.";
+    } else {
+        echo "Username and password are required.";
     }
 }
 
 $conn->close();
+
 ?>
 
 <!DOCTYPE html>
