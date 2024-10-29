@@ -1,4 +1,5 @@
 <?php
+session_start();
 // db.php should be included here
 require 'db.php';
 

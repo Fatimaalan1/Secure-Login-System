@@ -5,4 +5,4 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (username, password) VALUES ('admin', '$2y$10$yourhashedpassword');
+INSERT INTO users (username, password, role) VALUES ('admin_username', '$2y$10$gCi3aXJg4/oZcqpRKHbkaOj4m3Z.i9o/p6h2AySXhNko1/3zxwg3y', 'admin');

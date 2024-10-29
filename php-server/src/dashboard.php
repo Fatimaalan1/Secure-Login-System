@@ -1,4 +1,5 @@
 <?php
+session_start();
 // logged-users.php
 require 'config.php';
 
