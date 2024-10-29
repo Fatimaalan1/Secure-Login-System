@@ -17,15 +17,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputUsername = $_POST['username'];
     $inputPassword = $_POST['password'];
 
-    $hashedPassword = password_hash($inputPassword, PASSWORD_DEFAULT);
-
+    // $hashedPassword = password_hash($inputPassword, PASSWORD_DEFAULT);
+    try{
     $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-    $stmt->execute([$inputUsername, $hashedPassword]);
+    $stmt->execute([$username, $password]);
 
-    echo "Registration successful!";
-    header("Location: login.php");
-    exit();
+    
+        // Redirect after successful registration
+        header("Location: login.php");
+        exit(); // Always call exit after a redirect
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 }
+
 ?>
 
 <form method="POST" action="">
