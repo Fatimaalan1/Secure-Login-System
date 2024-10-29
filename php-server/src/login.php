@@ -11,6 +11,13 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'logout') {
+    session_destroy(); 
+    header('Location: login.php');
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -21,10 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$inputUsername]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($inputPassword, $user['password'])) {
+    if ($user && $user['password'] === $inputPassword) {
         $_SESSION['username'] = $inputUsername;
         $_SESSION['role'] = $user['role'];
-        header("Location: index.php");
+        //header("Location: index.php");
+        if ($user['role'] === 'admin') {
+            header("Location: admin.php");
+        } else {
+            header("Location: index.php");
+        }
+        exit();
         exit();
     } else {
         echo "Invalid username or password.";
@@ -37,3 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Password: <input type="password" name="password" required>
     <button type="submit">Login</button>
 </form>
+
+<?php if (isset($_SESSION['username'])): ?>
+    <p>You are logged in as <?= $_SESSION['username']; ?>.</p>
+    <a href="?action=logout">Logout</a>
+<?php endif; ?>

@@ -16,19 +16,23 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputUsername = $_POST['username'];
     $inputPassword = $_POST['password'];
-
-    // $hashedPassword = password_hash($inputPassword, PASSWORD_DEFAULT);
-    try{
-    $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-    $stmt->execute([$username, $password]);
-
     
-        // Redirect after successful registration
-        header("Location: login.php");
-        exit(); // Always call exit after a redirect
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+    if (!empty($inputUsername) && !empty($inputPassword)) {
+        try{
+            $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+            $stmt->execute([$inputUsername, $inputPassword]);
+
+            header("Location: login.php");
+            exit(); 
+        }
+        catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
+    else{
+        echo "Both username and password are required.";
+    }
+
 }
 
 ?>
