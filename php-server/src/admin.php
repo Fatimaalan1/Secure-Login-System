@@ -4,6 +4,12 @@ session_start();
 // Include the database connection file
 require 'db.php';
 
+// Define the redirect function
+function redirect($url) {
+    header("Location: $url");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Assuming 'username' and 'password' are posted from a login form
     $username = $_POST['username'];
@@ -17,11 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if user exists
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($hashed_password, $role);
+        $stmt->bind_result($stored_password, $role);
         $stmt->fetch();
 
         // Verify password
-        if (password_verify($password, $hashed_password)) {
+        if (password_verify($password, $stored_password)) {
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $role;
 

