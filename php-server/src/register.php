@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Execute the statement
         if ($stmt->execute()) {
             echo "Registration successful!";
+
         } else {
             echo "Error: " . $stmt->error;
         }
@@ -53,9 +54,14 @@ if ($conn) {
 <body>
     <h2>Register</h2>
     <form action="register.php" method="POST">
-    <input type="text" name="username" required placeholder="Username">
-    <input type="password" name="password" required placeholder="Password">
-    <button type="submit">Register</button>
-</form>
+        <input type="text" name="username" required placeholder="Username">
+        <input type="password" name="password" required placeholder="Password">
+        <button type="submit">Register</button>
+    </form></br>
+
+    <form action="index.php" method="POST">
+        <button type="submit">Back</button>
+    </form>
+    
 </body>
 </html>

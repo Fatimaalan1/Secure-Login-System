@@ -45,5 +45,9 @@ $conn->close();
         <input type="password" name="password" required placeholder="Password">
         <button type="submit">Login</button>
     </form>
+    
+    <form action="index.php" method="POST">
+        <button type="submit">Back</button>
+    </form>
 </body>
 </html>
